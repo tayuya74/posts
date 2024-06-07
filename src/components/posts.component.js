@@ -25,31 +25,31 @@ export class PostsComponent extends Component {
   onHide() {
     this.$el.innerHTML = ''
   }
-
 }
 
 function buttonHandler(event) {
   const $el = event.target
   const id = $el.dataset.id
+  const title = $el.dataset.title
 
   if (id) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+    const candidate = favorites.find(p => p.id === id)
 
-    if (favorites.includes(id)) {
+    if (candidate) {
        //удалить элемент
-       $el.textContent = 'Сохранить'
+       $el.textContent = 'Сохранить в избранное'
        $el.classList.add('button-primary')
        $el.classList.remove('button-danger')
-       favorites = favorites.filter(fId => fId !== id)
+       favorites = favorites.filter(p => p.id !== id)
     } else {
       //добавить элемент
       $el.classList.remove('button-primary')
       $el.classList.add('button-danger')
-      $el.textContent = 'Удалить'
-      favorites.push(id)
+      $el.textContent = 'Удалить из избранного'
+      favorites.push({id, title})
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites))
   }
-
 }
